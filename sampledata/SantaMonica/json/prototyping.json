@@ -62,22 +62,27 @@
                             "AYES": [
                                 {
                                     "name": "de la Torre Torosis",
+                                    "id": "00003",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Parra",
+                                    "id": "00005",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Zwick",
+                                    "id": "00006",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Brock",
+                                    "id": "00001",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Davis",
+                                    "id": "00002",
                                     "title": "Mayor"
                                 }
                             ],
@@ -86,6 +91,7 @@
                             "ABSENT": [
                                 {
                                     "name": "Negrete",
+                                    "id": "00004",
                                     "title": "Mayor Pro Tem"
                                 }                                    
                             ]
@@ -111,22 +117,27 @@
                             "AYES": [
                                 {
                                     "name": "de la Torre Torosis",
+                                    "id": "00003",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Parra",
+                                    "id": "00005",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Zwick",
+                                    "id": "00006",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Brock",
+                                    "id": "00001",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Davis",
+                                    "id": "00002",
                                     "title": "Mayor"
                                 }
                             ],
@@ -135,6 +146,7 @@
                             "ABSENT": [
                                 {
                                     "name": "Negrete",
+                                    "id": "00004",
                                     "title": "Mayor Pro Tem"
                                 }                                    
                             ]
@@ -160,30 +172,36 @@
                             "AYES": [
                                 {
                                     "name": "de la Torre Torosis",
+                                    "id": "00003",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Parra",
+                                    "id": "00005",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Zwick",
+                                    "id": "00006",
                                     "title": "Councilmember"
                                 },
                                 {
                                     "name": "Davis",
+                                    "id": "00002",
                                     "title": "Mayor"
                                 }
                             ],
                             "NOES": [
                                 {
                                     "name": "Brock",
+                                    "id": "00001",
                                     "title": "Councilmember"
                                 }
                             ],
                             "ABSENT": [
                                 {
                                     "name": "Negrete",
+                                    "id": "00004",
                                     "title": "Mayor Pro Tem"
                                 }                                    
                             ]
