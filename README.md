@@ -2,6 +2,18 @@
 
 # Prototype Mockup — Open Insight
 
+ETL Code:
+
+Python Setup
+
+Before running the script, make sure you have the following prerequisites installed:
+
+Python 3: Install Python 3 from the official website (https://www.python.org).
+NLTK: Install the NLTK package by running pip install nltk in your terminal.
+PyPDF2: Install the PyPDF2 package by running pip install PyPDF2 in your terminal.
+pymongo: Install the pymongo package by running pip install pymongo in your terminal.
+MongoDB: Make sure you have MongoDB installed and running on your system.
+
 Project Summary:
 
 The Open Insight project aims to create a suite of software tools to create engagement between constituents and leaders in Democratic political processes. As a first step in launching the project, a prototype of the React-based applications that can be used to provide a user-friendly interface to interact with historical data on issues, voting and outside influence will be built both to demonstrate the application to generate interest and to assist with the iterative design of the application itself.
