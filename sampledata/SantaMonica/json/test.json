@@ -1,0 +1,150 @@
+{
+    "date": "20230425",
+    "ordinances": [
+        {
+            "meetingnoteslineitem": "10.A.",
+            "result": "Approved",
+            "title": "Introduction and First Reading of an Ordinance amending SMMC Chapter 8.110 adding Gender Neutral Public Restroom Access",
+            "Recommended Action": [
+                {
+                    "ordinal": "1",
+                    "content": "Adopt a finding of no possibility of significant effect pursuant to Section 15061(b)(3) (Common Sense Exemption) of the California Environmental Quality Act (CEQA) Guidelines."
+                },{
+                    "ordinal": "2",
+                    "content": "Introduce for first reading the attached proposed ordinance to add Chapter 8.110 (Gender Neutral Public Restroom Access) to the Santa Monica Municipal Code."
+                }
+
+            ],
+            "votes": [
+                {
+                    "AYES": [
+                        {
+                            "name": "de la Torre Torosis",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Parra",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Zwick",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Brock",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Davis",
+                            "title": "Mayor"
+                        }
+                    ],
+                    "NOES": [
+                    ],
+                    "ABSENT": [
+                        {
+                            "name": "Negrete",
+                            "title": "Mayor Pro Tem"
+                        }                                    
+                    ]
+                }
+            ]
+        },{
+            "meetingnoteslineitem": "10.B.",
+            "result": "Approved",
+            "title": "Introduction and First Reading of an Interim Zoning Ordinance Extending Interim Zoning Regulations Adopted by Interim Zoning Ordinance 2738 (CCS) to Eliminate the Prohibition of Certain Restaurants with Frontage on the Third Street Promenade",
+            "Recommended Action": [
+                {
+                    "ordinal": "1",
+                    "content": "Adopt a finding of no possibility of significant effect pursuant to Section 15061(b)(3) (Common Sense Exemption) of the California Environmental Quality Act (CEQA) Guidelines; and"
+                },{
+                    "ordinal": "2",
+                    "content": "Introduce for first reading an Interim Zoning Ordinance extending interim zoning regulations adopted by Interim Zoning Ordinance 2738 (CCS) eliminating the prohibition of certain restaurants with frontage on the Third Street Promenade."
+                }
+
+            ],
+            "votes": [
+                {
+                    "AYES": [
+                        {
+                            "name": "de la Torre Torosis",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Parra",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Zwick",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Brock",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Davis",
+                            "title": "Mayor"
+                        }
+                    ],
+                    "NOES": [
+                    ],
+                    "ABSENT": [
+                        {
+                            "name": "Negrete",
+                            "title": "Mayor Pro Tem"
+                        }                                    
+                    ]
+                }
+            ]
+        },{
+            "meetingnoteslineitem": "10.C.",
+            "result": "Approved",
+            "title": "Introduction and Adoption of Urgency Ordinance No. 2744 (CCS) entitled “AN EMERGENCY ORDINANCE OF THE CITY COUNCIL OF THE CITY OF SANTA MONICA AMENDING SANTA MONICA MUNICIPAL CODE CHAPTER 4.68 TO ALLOW FOR “OPEN STREET” COMMUNITY EVENTS TO PROMOTE PUBLICSAFETY AND WELFARE”",
+            "Recommended Action": [
+                {
+                    "ordinal": "1",
+                    "content": "Adopt a finding of Categorical Exemption pursuant to CEQA Guidelines Section 15304 (minor alterations to land)"
+                },{
+                    "ordinal": "2",
+                    "content": "Introduce and adopt the urgency ordinance amending Chapter 4.68 to allow for “Open Street” Community Events to promote public safety and welfare, and associated changes."
+                }
+
+            ],
+            "votes": [
+                {
+                    "AYES": [
+                        {
+                            "name": "de la Torre Torosis",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Parra",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Zwick",
+                            "title": "Councilmember"
+                        },
+                        {
+                            "name": "Davis",
+                            "title": "Mayor"
+                        }
+                    ],
+                    "NOES": [
+                        {
+                            "name": "Brock",
+                            "title": "Councilmember"
+                        }
+                    ],
+                    "ABSENT": [
+                        {
+                            "name": "Negrete",
+                            "title": "Mayor Pro Tem"
+                        }                                    
+                    ]
+                }
+            ]
+        }
+    ]
+}
