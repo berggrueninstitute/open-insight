@@ -4,22 +4,24 @@ from pymongo import MongoClient
 
 # Download necessary NLTK packages
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 # Connect to MongoDB
-client = MongoClient('mongodb://localhost:27017')
+# client = MongoClient('mongodb://localhost:27017')
+client = MongoClient('mongodb://penguin:27017')
 db = client['pdfData']
 collection = db['parsedData']
 
 # Function to parse PDF and extract text
 def parse_pdf(file_path):
     with open(file_path, 'rb') as file:
-        pdf_reader = PyPDF2.PdfFileReader(file)
-        num_pages = pdf_reader.numPages
+        pdf_reader = PyPDF2.PdfReader(file)
+        num_pages = len(pdf_reader.pages)
 
         text = ''
         for page_num in range(num_pages):
-            page = pdf_reader.getPage(page_num)
-            text += page.extractText()
+            page = pdf_reader.pages[page_num]
+            text += page.extract_text()
 
         return text
 
@@ -32,7 +34,7 @@ def tokenize_and_tag(text):
     return tagged_sentences
 
 # Example usage
-pdf_file = 'example.pdf'  # Replace with your PDF file path
+pdf_file = 'sampledata/SantaMonica/Minutes/m20230425.pdf'  # Replace with your PDF file path
 
 # Parse PDF and extract text
 parsed_text = parse_pdf(pdf_file)
