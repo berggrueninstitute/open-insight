@@ -1,24 +1,37 @@
 # open-insight
 
-# Prototype Mockup — Open Insight
+## Prototype Mockup — Open Insight
 
-ETL Code:
+### ETL Code:
 
-Docker Setup (for MongoDB)
+##### MongoDB: 
+
+###### Docker Setup
 
 https://docs.docker.com/engine/install/debian/
 
-Python Setup
+###### Run MongoDB with Docker
+
+docker run --name mongo -p 27017:27017 -v ./data/db:/data/db -d mongodb/mongodb-community-server:latest
+
+#### Python Setup
 
 Before running the script, make sure you have the following prerequisites installed:
 
-Python 3: Install Python 3 from the official website (https://www.python.org).
-NLTK: Install the NLTK package by running pip install nltk in your terminal.
-PyPDF2: Install the PyPDF2 package by running pip install PyPDF2 in your terminal.
-pymongo: Install the pymongo package by running pip install pymongo in your terminal.
-MongoDB: Make sure you have MongoDB installed and running on your system.
+* Python 3: Install Python 3 from the official website (https://www.python.org).
 
-Project Summary:
+* PIP for Python 3: sudo apt install python3-pip
+
+* NLTK: Install the NLTK package by running pip install nltk in your terminal.
+
+* PyPDF2: Install the PyPDF2 package by running pip install PyPDF2 in your terminal.
+
+* pymongo: Install the pymongo package by running pip install pymongo in your terminal.
+
+
+
+
+## Project Summary:
 
 The Open Insight project aims to create a suite of software tools to create engagement between constituents and leaders in Democratic political processes. As a first step in launching the project, a prototype of the React-based applications that can be used to provide a user-friendly interface to interact with historical data on issues, voting and outside influence will be built both to demonstrate the application to generate interest and to assist with the iterative design of the application itself.
 
