@@ -16,6 +16,8 @@ Before running the script, make sure you have the following prerequisites instal
 
 * Python 3: Install Python 3 from the official website (https://www.python.org).
 
+* PIP for Python 3: sudo apt install python3-pip
+
 * NLTK: Install the NLTK package by running pip install nltk in your terminal.
 
 * PyPDF2: Install the PyPDF2 package by running pip install PyPDF2 in your terminal.
