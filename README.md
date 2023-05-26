@@ -4,6 +4,10 @@
 
 ETL Code:
 
+Docker Setup (for MongoDB)
+
+https://docs.docker.com/engine/install/debian/
+
 Python Setup
 
 Before running the script, make sure you have the following prerequisites installed:
