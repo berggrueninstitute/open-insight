@@ -6,6 +6,7 @@ import PyPDF2
 from pymongo import MongoClient
 
 import logging
+import re
 
 # Download necessary NLTK packages
 nltk.download('punkt')
@@ -39,7 +40,7 @@ def parse_pdf(file_path):
         return text
 
 
-def convertMonthTextToOrdinal(text):
+def convert_month_text_to_ordinal(text):
     if text=="JAN": return 1
     elif text=="FEB": return 2
     elif text=="MAR": return 3
@@ -62,31 +63,41 @@ def tokenize_and_tag(text):
     date_index = sentences[0].find(date_finder)
     text_with_date = sentences[0][date_index+len(date_finder):date_index+100].lstrip()
     tokenized_text_with_date = nltk.word_tokenize(text_with_date)
-    date = int(tokenized_text_with_date[3])*10000+int(tokenized_text_with_date[1])
+    if tokenized_text_with_date[2]==',':
+        date = int(tokenized_text_with_date[3])*10000+int(tokenized_text_with_date[1])
+    else:
+        date = int(tokenized_text_with_date[4])*10000+int(tokenized_text_with_date[1])*10+int(tokenized_text_with_date[2])
     month_text = tokenized_text_with_date[0][0:3]
-    date+= 100*convertMonthTextToOrdinal(month_text)
+    date+= 100*convert_month_text_to_ordinal(month_text)
     logging.error("Date: "+str(date))
 
     tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
     tagged_sentences = [nltk.pos_tag(tokens) for tokens in tokenized_sentences]
     ordinances=False
     for sentence in sentences:
-        xx="sdfads"
+        sentence=re.sub('\n','',sentence).strip()
         if sentence.find("ORDINANCES") >= 0:
+#        if sentence.find("10.A.") >= 0:
             ordinances=True
         if ordinances:
-            logging.error(sentence.strip())
-        if sentence.find("CONTINUE MEETING") >= 0:
+            logging.error(sentence)
+        if sentence.find("CONTINUE MEETING") >= 0 or sentence.find("STAFF ADMINISTRATIVE ITEMS") >= 0 or sentence.find("AGENDA MANAGEMENT") >= 0 or sentence.find("COUNCILMEMBER DISCUSSION ITEMS") >= 0:
             ordinances=False
-#            [(lambda x : logging.error(f"({x[0]}::::+ {x[1]}") if x[1]=='CD' else f"")(word) for word in sentence]
-#        test = lambda x : logging.error(f"({x[0]}::::+ {x[1]}") if x[1]=='CD' else f""
-#        [test(word) for word in sentence]
+             
 
     return tagged_sentences
 
 # Example usage
 #pdf_file = 'sampledata/SantaMonica/Minutes/m20230425.pdf'  # Replace with your PDF file path
-pdf_file = 'sampledata/SantaMonica/Minutes/m20230321.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230321.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230321_spe.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230314.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230311.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230228.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230222.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230214.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230124.pdf'  # Replace with your PDF file path
+pdf_file = 'sampledata/SantaMonica/Minutes/m20230110.pdf'  # Replace with your PDF file path
 
 # Parse PDF and extract text
 parsed_text = parse_pdf(pdf_file)
