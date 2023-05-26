@@ -14,13 +14,13 @@ https://docs.docker.com/engine/install/debian/
 
 Before running the script, make sure you have the following prerequisites installed:
 
-Python 3: Install Python 3 from the official website (https://www.python.org).
+* Python 3: Install Python 3 from the official website (https://www.python.org).
 
-NLTK: Install the NLTK package by running pip install nltk in your terminal.
+* NLTK: Install the NLTK package by running pip install nltk in your terminal.
 
-PyPDF2: Install the PyPDF2 package by running pip install PyPDF2 in your terminal.
+* PyPDF2: Install the PyPDF2 package by running pip install PyPDF2 in your terminal.
 
-pymongo: Install the pymongo package by running pip install pymongo in your terminal.
+* pymongo: Install the pymongo package by running pip install pymongo in your terminal.
 
 
 
