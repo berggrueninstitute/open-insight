@@ -12,8 +12,8 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
 # Connect to MongoDB
-# client = MongoClient('mongodb://localhost:27017')
-client = MongoClient('mongodb://penguin:27017')
+client = MongoClient('mongodb://localhost:27017')
+#client = MongoClient('mongodb://penguin:27017')
 db = client['pdfData']
 collection = db['parsedData']
 
@@ -65,20 +65,28 @@ def tokenize_and_tag(text):
     date = int(tokenized_text_with_date[3])*10000+int(tokenized_text_with_date[1])
     month_text = tokenized_text_with_date[0][0:3]
     date+= 100*convertMonthTextToOrdinal(month_text)
+    logging.error("Date: "+str(date))
 
     tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
     tagged_sentences = [nltk.pos_tag(tokens) for tokens in tokenized_sentences]
-    for sentence in tagged_sentences:
-#        tree = chunk_parser.parse(sentence)
-#        tree.draw()
-        [(lambda x : logging.error(f"({x[0]}::::+ {x[1]}") if x[1]=='CD' else f"")(word) for word in sentence]
+    ordinances=False
+    for sentence in sentences:
+        xx="sdfads"
+        if sentence.find("ORDINANCES") >= 0:
+            ordinances=True
+        if ordinances:
+            logging.error(sentence.strip())
+        if sentence.find("CONTINUE MEETING") >= 0:
+            ordinances=False
+#            [(lambda x : logging.error(f"({x[0]}::::+ {x[1]}") if x[1]=='CD' else f"")(word) for word in sentence]
 #        test = lambda x : logging.error(f"({x[0]}::::+ {x[1]}") if x[1]=='CD' else f""
 #        [test(word) for word in sentence]
 
     return tagged_sentences
 
 # Example usage
-pdf_file = 'sampledata/SantaMonica/Minutes/m20230425.pdf'  # Replace with your PDF file path
+#pdf_file = 'sampledata/SantaMonica/Minutes/m20230425.pdf'  # Replace with your PDF file path
+pdf_file = 'sampledata/SantaMonica/Minutes/m20230321.pdf'  # Replace with your PDF file path
 
 # Parse PDF and extract text
 parsed_text = parse_pdf(pdf_file)
