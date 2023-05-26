@@ -39,7 +39,7 @@ def parse_pdf(file_path):
         return text
 
 
-def convertMonthTextToOrdinal(text):
+def convert_month_text_to_ordinal(text):
     if text=="JAN": return 1
     elif text=="FEB": return 2
     elif text=="MAR": return 3
@@ -64,7 +64,7 @@ def tokenize_and_tag(text):
     tokenized_text_with_date = nltk.word_tokenize(text_with_date)
     date = int(tokenized_text_with_date[3])*10000+int(tokenized_text_with_date[1])
     month_text = tokenized_text_with_date[0][0:3]
-    date+= 100*convertMonthTextToOrdinal(month_text)
+    date+= 100*convert_month_text_to_ordinal(month_text)
     logging.error("Date: "+str(date))
 
     tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
