@@ -12,7 +12,7 @@ https://docs.docker.com/engine/install/debian/
 
 ###### Run MongoDB with Docker
 
-docker run --name mongo -p 27017:27017 -v ./data/db:/data/db -d mongodb/mongodb-community-server:latest
+docker run --name mongo -p 27017:27017 -v ~/data/db:/data/db -d mongo:latest
 
 #### Python Setup
 
