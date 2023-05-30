@@ -32,6 +32,8 @@ pip install PyPDF2
 * pymongo: Install the pymongo package by running 
 pip install pymongo
 
+* pymongo: Install the objdict package by running 
+pip install objdict
 
 
 
