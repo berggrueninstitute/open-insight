@@ -132,7 +132,7 @@ def get_end_ordinance_flag_position(sentence):
                 flag4 = sentence.find("COUNCILMEMBER DISCUSSION ITEMS")
                 return flag4
             
-def extract_ordinance_json_from_text(ordinances_text):
+def extract_ordinances_from_text(ordinances_text):
     ordinances = []
     ordinance_index = 0
     current_text = ordinances_text[ordinances_text.find(':')+1:].strip()
@@ -150,9 +150,28 @@ def extract_ordinance_json_from_text(ordinances_text):
         next_colon_index = current_text.find(':')
         next_period_index = current_text.find('.')
         if next_colon_index>=0 and next_colon_index < next_period_index:
-            recommended_action_text = current_text.strip()
+            recommended_actions_end_index = current_text.find('Questions asked')
+            recommended_action_text = current_text[:recommended_actions_end_index].strip()
+            recommended_action_text = recommended_action_text[recommended_action_text.find('1.'):]
             ordinance_object.Recommended_Actions=[]
-            ordinance_object.Recommended_Actions.append(recommended_action_text)
+            recommended_action_ordinal = 1
+            while len(recommended_action_text) > 0:
+                recommended_action = ObjDict()
+                recommended_action.ordinal = recommended_action_ordinal
+                next_ordinal_index = recommended_action_text.find(str(recommended_action_ordinal+1)+".")
+                if next_ordinal_index > 0:
+                    another_next_ordinal_index = recommended_action_text.rindex(str(recommended_action_ordinal+1)+".")
+                    if(next_ordinal_index!=another_next_ordinal_index):
+                        logging.error(''.join(["Possible Problem Reading Ordinance ",ordinance_number," Recommended Action #",str(recommended_action_ordinal)," due to unclear next index."]))
+                        next_ordinal_index=another_next_ordinal_index
+                    recommended_action.content = recommended_action_text[len(str(recommended_action_ordinal))+1:next_ordinal_index]
+                    recommended_action_text = recommended_action_text[next_ordinal_index:]
+                else:
+                    recommended_action.content = recommended_action_text[len(str(recommended_action_ordinal))+1:]
+                    recommended_action_text = ''
+                recommended_action_ordinal+=1
+                ordinance_object.Recommended_Actions.append(recommended_action)
+            current_text = current_text[recommended_actions_end_index:]
         else:
             ordinance_object.Recommended_Actions = current_text[:next_period_index+1].strip()
             current_text = current_text[next_period_index+1:]
@@ -198,40 +217,38 @@ def extract_date_from_minutes(sentences):
     date+= 100*convert_month_text_to_ordinal(month_text)
     return date
 
-# Example usage
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230425.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230321.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230321_spe.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230314.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230311.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230228.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230222.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230214.pdf'  # Replace with your PDF file path
-#pdf_file = 'sampledata/SantaMonica/Minutes/m20230124.pdf'  # Replace with your PDF file path
-pdf_file = 'sampledata/SantaMonica/Minutes/m20230110.pdf'  # Replace with your PDF file path
 
-minutes_object = ObjDict()
-# Parse PDF and extract text
-minutes_text = extract_text_from_pdf(pdf_file)
+def extract_minutes_object_from_pdf(file):
+    minutes_text = extract_text_from_pdf(file)
+    # Tokenize the text using NLTK
+    minutes_sentences = tokenize_text(minutes_text)
+    meeting_date = extract_date_from_minutes(minutes_sentences)
+    ordinances_text = extract_ordinances_from_minutes(minutes_sentences)
 
-# Tokenize and tag the text using NLTK
-minutes_sentences = tokenize_text(minutes_text)
-meeting_date = extract_date_from_minutes(minutes_sentences)
-minutes_object.date = str(meeting_date)
-#logging.error("Date: "+str(meeting_date))
-
-ordinances_text = extract_ordinances_from_minutes(minutes_sentences)
-minutes_object.ordinances = extract_ordinance_json_from_text(ordinances_text)
-#minutes_object.ordinances_text = ordinances_text
-
-
-#return_object.minutes = [minutes_object]
+    to_return = ObjDict()
+    to_return.date = str(meeting_date)
+    to_return.ordinances = extract_ordinances_from_text(ordinances_text)
  
-# Insert parsed data into MongoDB
-return_json = minutes_object.dumps()
-#print("Ordinances JSON: "+str(return_json))
-print(json.dumps(json.loads(return_json), indent=2))
-collection.insert_one({"minutes": minutes_object, 'json':return_json,'meeting_date': meeting_date, 'meeting_ordinances_text': ordinances_text, 'meeting_minutes_text': minutes_text})
 
-# Close the MongoDB connection
+    collection.insert_one({"minutes": to_return,'meeting_date': meeting_date, 'meeting_ordinances_text': ordinances_text, 'meeting_minutes_text': minutes_text})
+    return to_return
+
+
+pdf_file=[]
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230425.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230321.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230321_spe.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230314.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230311.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230228.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230222.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230214.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230124.pdf')
+pdf_file.append('sampledata/SantaMonica/Minutes/m20230110.pdf')
+
+
+minutes_object = extract_minutes_object_from_pdf(pdf_file[len(pdf_file)-1])
+return_json = minutes_object.dumps()
+print(json.dumps(json.loads(return_json), indent=2))
+
 client.close()
