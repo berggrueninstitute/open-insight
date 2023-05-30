@@ -149,7 +149,7 @@ def extract_ordinances_from_text(ordinances_text):
         next_colon_index = current_text.find(':')
         next_period_index = current_text.find('.')
         if next_colon_index>=0 and next_colon_index < next_period_index:
-            recommended_actions_end_index = current_text.find('Questions asked')
+            recommended_actions_end_index = get_recommended_actions_end_index(current_text)
             recommended_action_text = current_text[:recommended_actions_end_index].strip()
             recommended_action_text = recommended_action_text[recommended_action_text.find('1.'):]
             ordinance_object.Recommended_Actions=[]
@@ -163,8 +163,8 @@ def extract_ordinances_from_text(ordinances_text):
                     if(next_ordinal_index!=another_next_ordinal_index):
                         logging.error(''.join(["Possible Problem Reading Ordinance ",ordinance_number," Recommended Action #",str(recommended_action_ordinal)," due to unclear next index."]))
                         next_ordinal_index=another_next_ordinal_index
-                    recommended_action.content = recommended_action_text[len(str(recommended_action_ordinal))+1:next_ordinal_index]
-                    recommended_action_text = recommended_action_text[next_ordinal_index:]
+                    recommended_action.content = recommended_action_text[len(str(recommended_action_ordinal))+1:next_ordinal_index].strip()
+                    recommended_action_text = recommended_action_text[next_ordinal_index:].strip()
                 else:
                     recommended_action.content = recommended_action_text[len(str(recommended_action_ordinal))+1:]
                     recommended_action_text = ''
@@ -174,8 +174,11 @@ def extract_ordinances_from_text(ordinances_text):
         else:
             ordinance_object.Recommended_Actions = current_text[:next_period_index+1].strip()
             current_text = current_text[next_period_index+1:]
-
-        ayes_index = current_text.find('AYES')
+        next_ordinance_index = current_text.find(''.join(['10.',chr(ord('A')+ordinance_index+1),'.']))
+        if next_ordinance_index > 0:
+            ayes_index = current_text.rfind('AYES',0,next_ordinance_index)
+        else:
+            ayes_index = current_text.rfind('AYES')
         current_text = current_text[ayes_index:].strip()
         noes_index = current_text.find('NOES')
         absent_index = current_text.find('ABSENT')
@@ -188,15 +191,26 @@ def extract_ordinances_from_text(ordinances_text):
         ordinance_object.AYES = parse_voters(ayes_text)
         ordinance_object.NOES = parse_voters(noes_text)
         ordinance_object.ABSENT = parse_voters(absent_text)
+#        print(json.dumps(json.loads(ordinance_object.dumps()), indent=2))
 
         ordinances.append(ordinance_object)
 
         ordinance_index+=1
 
-        if len(current_text) == 0:
+        if len(current_text) == 0 or next_ordinance_index < 0:
             break
 
     return ordinances
+
+def get_recommended_actions_end_index(current_text):
+    indexes=[]
+    indexes.append(current_text.find('Questions asked'))
+    indexes.append(current_text.find('Motion by'))
+    min_index = 999999999
+    for index in indexes:
+        if index > 0 and index < min_index:
+            min_index=index
+    return min_index
 
 def parse_voters(text):
     to_return = []
@@ -261,11 +275,14 @@ def get_names_from_comma_list(text):
 
 def get_end_of_absent_index(text):
     index = len('ABSENT:')
-    while True:
+    while index<len(text):
         if text[index:].startswith('None'):
-            return index+len('None')
+            return index+len('None')        
+        elif text[index:text.find(' ',index)].isupper():
+            return index            
         else:
             index+=1
+    return index
     
 def extract_date_from_minutes(sentences):
     date_finder = "CITY COUNCIL MINUTES"
@@ -289,29 +306,33 @@ def extract_minutes_object_from_pdf(file):
     ordinances_text = extract_ordinances_from_minutes(minutes_sentences)
 
     to_return = ObjDict()
-    to_return.date = str(meeting_date)
-    to_return.ordinances = extract_ordinances_from_text(ordinances_text)
+    to_return.date = meeting_date
+    if(len(ordinances_text)>0):
+        to_return.ordinances = extract_ordinances_from_text(ordinances_text)
  
 
     collection.insert_one({"minutes": to_return,'meeting_date': meeting_date, 'meeting_ordinances_text': ordinances_text, 'meeting_minutes_text': minutes_text})
     return to_return
 
 
-pdf_file=[]
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230425.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230321.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230321_spe.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230314.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230311.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230228.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230222.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230214.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230124.pdf')
-pdf_file.append('sampledata/SantaMonica/Minutes/m20230110.pdf')
+pdf_files=[]
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230425.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230321.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230321_spe.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230314.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230311.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230228.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230222.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230214.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230124.pdf')
+pdf_files.append('sampledata/SantaMonica/Minutes/m20230110.pdf')
 
-
-minutes_object = extract_minutes_object_from_pdf(pdf_file[len(pdf_file)-1])
-return_json = minutes_object.dumps()
+aggregation = ObjDict()
+aggregation.minutes=[]
+for file in pdf_files:
+    minutes_object = extract_minutes_object_from_pdf(file)
+    aggregation.minutes.append(minutes_object)
+return_json = aggregation.dumps()
 print(json.dumps(json.loads(return_json), indent=2))
 
 client.close()
