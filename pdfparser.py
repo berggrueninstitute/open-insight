@@ -82,7 +82,6 @@ def extract_ordinances_from_minutes(sentences):
             if ordinance_text_position >= 0:
                 new_var = sentence[ordinance_text_position:]
                 ordinance_text.append(new_var)
-#        if sentence.find("10.A.") >= 0:
                 ordinances=True
     return ''.join(ordinance_text)
 
@@ -175,8 +174,8 @@ def extract_ordinances_from_text(ordinances_text):
         else:
             ordinance_object.Recommended_Actions = current_text[:next_period_index+1].strip()
             current_text = current_text[next_period_index+1:]
+
         ayes_index = current_text.find('AYES')
-#        ordinance_object.other_text = current_text[:ayes_index]
         current_text = current_text[ayes_index:].strip()
         noes_index = current_text.find('NOES')
         absent_index = current_text.find('ABSENT')
@@ -186,15 +185,79 @@ def extract_ordinances_from_text(ordinances_text):
         end_of_absent_index = get_end_of_absent_index(current_text)
         absent_text = current_text[len('ABSENT:'):end_of_absent_index].strip()
         current_text = current_text[end_of_absent_index:].strip()
-        ordinance_object.AYES = ayes_text
-        ordinance_object.NOES = noes_text
-        ordinance_object.ABSENT = absent_text
+        ordinance_object.AYES = parse_voters(ayes_text)
+        ordinance_object.NOES = parse_voters(noes_text)
+        ordinance_object.ABSENT = parse_voters(absent_text)
+
         ordinances.append(ordinance_object)
+
         ordinance_index+=1
+
         if len(current_text) == 0:
             break
+
     return ordinances
 
+def parse_voters(text):
+    to_return = []
+
+    pro_tem_index = text.find("Mayor Pro Tem")
+    if pro_tem_index >= 0:
+        pro_tem_text = text[pro_tem_index+len("Mayor Pro Tem"):].strip()
+        next_comma = pro_tem_text.find(",")
+        if next_comma > 0:
+            pro_tem_text = pro_tem_text[:next_comma]
+        to_return.append({"name": pro_tem_text, "title": "Mayor Pro Tem"})
+
+    mayor_index = text.find("Mayor")
+    if mayor_index == pro_tem_index:
+        new_index = text.rfind("Mayor")
+        if new_index!=mayor_index:
+            mayor_index=new_index
+        else:
+            mayor_index=-1 
+    if mayor_index >= 0:
+        mayor_text = text[mayor_index+5:].strip()
+        next_comma = mayor_text.find(",")
+        if next_comma > 0:
+            mayor_text = mayor_text[:next_comma]
+        to_return.append({"name": mayor_text, "title": "Mayor"})
+
+    council_index = text.find("Councilmembers")
+    if council_index >= 0:
+        if mayor_index < 0:
+            mayor_index=999999999
+        if pro_tem_index < 0:
+            pro_tem_index=999999999
+        if min(mayor_index, pro_tem_index) > council_index:
+            council_text = text[council_index+len("Councilmembers"):min(mayor_index, pro_tem_index)].strip()
+        council_names = get_names_from_comma_list(council_text)
+        for name in council_names:
+            to_return.append({"name": name, "title": "Councilmember"})
+    else:
+        council_index = text.find("Councilmember")
+        if council_index >= 0:
+            council_text = text[council_index+len("Councilmember"):].strip()
+            next_comma = council_text.find(",")
+            if next_comma > 0:
+                council_text = council_text[:next_comma]
+            to_return.append({"name": council_text, "title": "Concilmember"})
+
+    
+    return to_return
+
+def get_names_from_comma_list(text):
+    to_return = []
+    work_text = text
+    while True:
+        next_comma_index = work_text.find(",")
+        if next_comma_index < 0:
+            if len(work_text) > 0:
+                to_return.append(work_text)
+            return to_return
+        else:
+            to_return.append(work_text[:next_comma_index])
+            work_text=work_text[next_comma_index+1:].strip()
 
 def get_end_of_absent_index(text):
     index = len('ABSENT:')
