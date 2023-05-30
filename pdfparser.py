@@ -63,7 +63,7 @@ def extract_ordinances_from_minutes(sentences):
     ordinances=False
     ordinance_text=[]
     for sentence in sentences:
-        sentence=re.sub('\n','',sentence).strip()
+        sentence = remove_noise(sentence)
         if(ordinances):
             end_flag_position = get_end_ordinance_flag_position(sentence)
             if end_flag_position >= 0:
@@ -78,6 +78,36 @@ def extract_ordinances_from_minutes(sentences):
 #        if sentence.find("10.A.") >= 0:
                 ordinances=True
     return ''.join(ordinance_text)
+
+def remove_noise(sentence):
+    sentence=re.sub('\n','',sentence).strip()
+    docusign_envelope_id = sentence.find('DocuSign Envelope ID')
+    if docusign_envelope_id >= 0:
+        sentence = ''.join([sentence[0:docusign_envelope_id], sentence[find_docusign_end(sentence, docusign_envelope_id):]])
+    return sentence
+
+def find_docusign_end(sentence, start):
+    current = start + 61 # seems to be magic number
+    while current < len(sentence):
+        new_var = sentence[current]
+        if new_var >= '0' and sentence[current] <= '9':
+            new_var1 = sentence[current+1]
+            if new_var1 >= '0' and sentence[current+1] <= '9':
+                new_var2 = sentence[current+2]
+                if new_var2 >= '0' and sentence[current+2] <= '9':
+                    new_var3 = sentence[current+3]
+                    if new_var3 >= '0' and sentence[current+3] <= '9':
+                        return current+4
+                    else:
+                        current+=4
+                else:
+                    current+=3
+            else:
+                current+=2
+        else:
+            current+=1
+
+
 
 def get_end_ordinance_flag_position(sentence):
     flag1 = sentence.find("CONTINUE MEETING")
