@@ -4,14 +4,24 @@
 
 ### ETL Code:
 
+#### TL/DR:
+
+Build and run demo with database (requires Docker):
+
+docker-compose build && docker-compose up --abort-on-container-exit && docker-compose down
+
 ##### MongoDB: 
 
 ###### Docker Setup
 
 https://docs.docker.com/engine/install/debian/
 
-###### Run MongoDB with Docker
+###### Run MongoDB and Parser with Docker and exit
 
+docker-compose build && docker-compose up --abort-on-container-exit && docker-compose down
+
+
+###### Run MongoDB with Docker and local filesystem for development
 docker run --name mongo -p 27017:27017 -v ~/data/db:/data/db -d mongo:latest
 
 #### Python Setup
