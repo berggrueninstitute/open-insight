@@ -14,9 +14,10 @@ nltk.download('punkt')
 
 # Connect to MongoDB
 #client = MongoClient('mongodb://localhost:27017')
-client = MongoClient('mongodb://penguin:27017')
+#client = MongoClient('mongodb://penguin:27017')
+client = MongoClient('mongodb://mongonet:27017')
 db = client['santa_monica_data']
-collection = db['parsed_minutes_pdfs']
+collection = db['parsed_minutes_pdfs_new']
 
 return_object = ObjDict()
 
