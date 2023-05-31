@@ -7,7 +7,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-COPY pdfparser.py pdfparser.py
 COPY sampledata/SantaMonica/Minutes/ sampledata/SantaMonica/Minutes/
+COPY pdfparser.py pdfparser.py
 
 CMD ["python3", "pdfparser.py"]
