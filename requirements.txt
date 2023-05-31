@@ -1,4 +1,4 @@
-nltk==3.5
+nltk==3.6.6
 pypdf2==3.0.1
 pymongo==4.3.3
 ObjDict==0.4.4
