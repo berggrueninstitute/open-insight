@@ -1,5 +1,5 @@
 import nltk
-import tkinter
+#import tkinter
 import PyPDF2
 from pymongo import MongoClient
 import logging
