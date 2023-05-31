@@ -1,5 +1,4 @@
 import nltk
-#import tkinter
 import PyPDF2
 from pymongo import MongoClient
 import logging
@@ -10,24 +9,13 @@ from objdict import ObjDict
 
 # Download necessary NLTK packages
 nltk.download('punkt')
-#nltk.download('averaged_perceptron_tagger')
 
 # Connect to MongoDB
 #client = MongoClient('mongodb://localhost:27017')
 #client = MongoClient('mongodb://penguin:27017')
 client = MongoClient('mongodb://mongonet:27017')
 db = client['santa_monica_data']
-collection = db['parsed_minutes_pdfs_new']
-
-return_object = ObjDict()
-
-
-#grammar = """
-#    Chunk: {<.*>+}
-#    }<CD>{"""
-#    }<LS>{"""
-#    }<CD>{"""
-#chunk_parser = nltk.RegexpParser(grammar)
+collection = db['city_council']
 
 
 # Function to parse PDF and extract text
@@ -62,8 +50,6 @@ def convert_month_text_to_ordinal(text):
 # Function to tokenize and tag the text using NLTK
 def tokenize_text(text):
     sentences = nltk.sent_tokenize(text)
-#    tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
-#    tagged_sentences = [nltk.pos_tag(tokens) for tokens in tokenized_sentences]
     return sentences
 
 def extract_ordinances_from_minutes(sentences):
@@ -192,7 +178,6 @@ def extract_ordinances_from_text(ordinances_text):
         ordinance_object.AYES = parse_voters(ayes_text)
         ordinance_object.NOES = parse_voters(noes_text)
         ordinance_object.ABSENT = parse_voters(absent_text)
-#        print(json.dumps(json.loads(ordinance_object.dumps()), indent=2))
 
         ordinances.append(ordinance_object)
 
