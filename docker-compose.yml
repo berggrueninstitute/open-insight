@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+ pdfparser:
+  build:
+   context: .
+
+ mongonet:
+  image: mongo
+  volumes:
+  - mongodb:/var/lib/mysql
+
+volumes:
+  mongodb:

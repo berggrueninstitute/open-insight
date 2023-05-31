@@ -1,0 +1,4 @@
+nltk
+PyPDF2
+pymongo
+objdict
