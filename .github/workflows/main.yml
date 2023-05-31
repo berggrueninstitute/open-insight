@@ -8,3 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    steps:
+      - name: Group of log lines
+        run: |
+            docker-compose build && docker-compose up --abort-on-container-exit --exit-code-from pdfparser && docker-compose down
